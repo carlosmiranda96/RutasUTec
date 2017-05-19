@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_buscar"
+        android:actionViewClass="android.widget.SearchView"
+        android:icon="@drawable/buscar"
+        android:title="Search"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/nav_perfil"
+        android:icon="@drawable/perfil"
+        android:title="Perfil"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/nav_config"
+        android:icon="@drawable/ajustes"
+        android:title="Configuración"
+        app:showAsAction="collapseActionView" />
+</menu>

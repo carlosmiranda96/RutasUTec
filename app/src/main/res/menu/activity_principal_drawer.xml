@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_inicio"
+            android:icon="@drawable/home"
+            android:title="Inicio" />
+        <item
+            android:id="@+id/nav_mapas"
+            android:icon="@drawable/mapa"
+            android:title="Mapa" />
+        <item
+            android:id="@+id/nav_rutas"
+            android:icon="@drawable/ruta"
+            android:title="Rutas" />
+        <item
+            android:id="@+id/nav_contactanos"
+            android:icon="@drawable/contactenos"
+            android:title="Contactanos" />
+        <item
+            android:id="@+id/nav_salir"
+            android:icon="@drawable/salir"
+            android:title="Cerrar Sesión" />
+    </group>
+
+</menu>
