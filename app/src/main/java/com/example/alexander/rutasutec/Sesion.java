@@ -1,8 +1,11 @@
 package com.example.alexander.rutasutec;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -55,9 +58,16 @@ public class Sesion extends AppCompatActivity {
                 {
                     if(!contra.getText().toString().isEmpty())
                     {
-                        ProgressDialog progress = new ProgressDialog(Sesion.this);
-                        progress.setMessage("Iniciando Sesión..");
-                        new MyTask(progress, Sesion.this,usuario.getText().toString(),contra.getText().toString()).execute();
+                        if(isOnlineNet()!=false)
+                        {
+                            ProgressDialog progress = new ProgressDialog(Sesion.this);
+                            progress.setMessage("Iniciando Sesión..");
+                            new MyTask(progress, Sesion.this,usuario.getText().toString(),contra.getText().toString()).execute();
+                        }
+                        else
+                        {
+                            Toast.makeText(Sesion.this,"No hay Acceso a internet",Toast.LENGTH_SHORT).show();
+                        }
                     }
                     else
                     {
@@ -70,6 +80,30 @@ public class Sesion extends AppCompatActivity {
                 }
             }
         });
+    }
+    public Boolean isOnlineNet() {
+
+        try {
+            Process p = java.lang.Runtime.getRuntime().exec("ping -c 1 www.google.es");
+
+            int val           = p.waitFor();
+            boolean reachable = (val == 0);
+            return reachable;
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
+    }
+    private boolean isNetDisponible() {
+
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo actNetInfo = connectivityManager.getActiveNetworkInfo();
+
+        return (actNetInfo != null && actNetInfo.isConnected());
     }
     public void onBackPressed() {
         finish();
