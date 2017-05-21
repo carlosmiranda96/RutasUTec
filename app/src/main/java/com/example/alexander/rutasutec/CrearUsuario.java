@@ -175,37 +175,48 @@ public class CrearUsuario extends AppCompatActivity {
         }
 
         public void onPostExecute(Void unused) {
+            Toast.makeText(CrearUsuario.this,mensaje,Toast.LENGTH_SHORT).show();
             progress.dismiss();
         }
-
+        AccesoInternet objeto = new AccesoInternet();
         protected Void doInBackground(Void... params) {
             mensaje = "Error";
-            if(obtenerDatos(Registrar(usuario,contra,correo))==1)
+            if(objeto.verificar()==true)
             {
-                registro=true;
-                act.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(registro==true)
-                        {
-                            Toast.makeText(CrearUsuario.this,"Su cuenta se ha creado correctamente!",Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(CrearUsuario.this,Principal.class));
-                            act.usuario.setText("");
-                            act.correo.setText("");
-                            act.contra1.setText("");
-                            act.contra2.setText("");
+                if(obtenerDatos(Registrar(usuario,contra,correo))==1)
+                {
+                    registro=true;
+                    act.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(registro==true)
+                            {
+                                //Toast.makeText(CrearUsuario.this,"Su cuenta se ha creado correctamente!",Toast.LENGTH_SHORT).show();
+                                Intent objeto = new Intent (getApplicationContext(),Principal.class);
+                                objeto.putExtra("usuario",usuario);
+                                startActivity(objeto);
+                                act.usuario.setText("");
+                                act.correo.setText("");
+                                act.contra1.setText("");
+                                act.contra2.setText("");
+                            }
                         }
-                    }
-                });
+                    });
+                }
+                else
+                {
+                    act.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mensaje = "No se pudo registrar";
+                            //Toast.makeText(CrearUsuario.this,"No se pudo registrar",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
             else
             {
-                act.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(CrearUsuario.this,"No se pudo registrar",Toast.LENGTH_SHORT).show();
-                    }
-                });
+                mensaje = "No hay acceso a internet";
             }
             while (progreso<100)
             {

@@ -1,26 +1,17 @@
 package com.example.alexander.rutasutec;
 
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.os.SystemClock;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -58,16 +49,9 @@ public class Sesion extends AppCompatActivity {
                 {
                     if(!contra.getText().toString().isEmpty())
                     {
-                        if(isOnlineNet()!=false)
-                        {
-                            ProgressDialog progress = new ProgressDialog(Sesion.this);
-                            progress.setMessage("Iniciando Sesión..");
-                            new MyTask(progress, Sesion.this,usuario.getText().toString(),contra.getText().toString()).execute();
-                        }
-                        else
-                        {
-                            Toast.makeText(Sesion.this,"No hay Acceso a internet",Toast.LENGTH_SHORT).show();
-                        }
+                        ProgressDialog progress = new ProgressDialog(Sesion.this);
+                        progress.setMessage("Iniciando Sesión..");
+                        new MyTask(progress, Sesion.this,usuario.getText().toString(),contra.getText().toString()).execute();
                     }
                     else
                     {
@@ -81,30 +65,7 @@ public class Sesion extends AppCompatActivity {
             }
         });
     }
-    public Boolean isOnlineNet() {
 
-        try {
-            Process p = java.lang.Runtime.getRuntime().exec("ping -c 1 www.google.es");
-
-            int val           = p.waitFor();
-            boolean reachable = (val == 0);
-            return reachable;
-
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return false;
-    }
-    private boolean isNetDisponible() {
-
-        ConnectivityManager connectivityManager = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo actNetInfo = connectivityManager.getActiveNetworkInfo();
-
-        return (actNetInfo != null && actNetInfo.isConnected());
-    }
     public void onBackPressed() {
         finish();
         startActivity(new Intent(Sesion.this, com.example.alexander.rutasutec.inicio.class));
@@ -172,6 +133,7 @@ public class Sesion extends AppCompatActivity {
         }
 
         public void onPreExecute() {
+            iniciar=false;
             progreso=0;
             progress.show();
         }
@@ -189,18 +151,26 @@ public class Sesion extends AppCompatActivity {
             else
             {
                 Toast.makeText(Sesion.this,mensaje,Toast.LENGTH_SHORT).show();
+
             }
             progress.dismiss();
         }
-
+        AccesoInternet objeto = new AccesoInternet();
         protected Void doInBackground(Void... params) {
-            if(obtenerDatos(InicioSesion(usuario,contra))==1)
+            if(objeto.verificar()==true)
             {
-                iniciar=true;
+                if(obtenerDatos(InicioSesion(usuario,contra))==1)
+                {
+                    iniciar=true;
+                }
+                else
+                {
+                    mensaje = "Usuario o contra incorrecta!";
+                }
             }
             else
             {
-                mensaje = "Usuario o contra incorrecta!";
+                mensaje = "No hay acceso a internet";
             }
             while (progreso<100)
             {

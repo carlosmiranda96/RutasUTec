@@ -35,11 +35,12 @@ public class inicio extends AppCompatActivity {
         objeto.setPositiveButton("Si", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                finish();
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.addCategory(Intent.CATEGORY_HOME);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                finish();
+                System.exit(0);
             }
         });
         objeto.setNegativeButton("No", new DialogInterface.OnClickListener() {

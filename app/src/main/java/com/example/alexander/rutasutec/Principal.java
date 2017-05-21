@@ -13,17 +13,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 public class Principal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    String usuario = "Default";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
-
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -39,6 +42,12 @@ public class Principal extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        //para mostrar el usuario en el Menu
+        View headerView = navigationView.getHeaderView(0);
+
+        TextView usuarioMenu = (TextView)headerView.findViewById(R.id.usuarioMenu);
+        usuario = getIntent().getStringExtra("usuario");
+        usuarioMenu.setText(usuario);
     }
 
     @Override
@@ -71,13 +80,11 @@ public class Principal extends AppCompatActivity
         if (id == R.id.nav_inicio) {
             frag.beginTransaction().replace(R.id.contenedor, new start()).commit();
         } else if (id == R.id.nav_mapas) {
-            //frag.beginTransaction().replace(R.id.contenedor,new fragMaps()).commit();
-            startActivity(new Intent(this, Maps.class));
+            frag.beginTransaction().replace(R.id.contenedor,new fragMaps()).commit();
         } else if (id == R.id.nav_rutas) {
-            //frag.beginTransaction().replace(R.id.contenedor, new fragRutas()).commit();
-            startActivity(new Intent(this, Rutas.class));
+            frag.beginTransaction().replace(R.id.contenedor, new fragRutas()).commit();
         } else if (id == R.id.nav_contactanos){
-
+            frag.beginTransaction().replace(R.id.contenedor, new fragContactenos()).commit();
         }
         else if (id == R.id.nav_salir) {
             onBackPressed();
@@ -102,10 +109,13 @@ public class Principal extends AppCompatActivity
             Toast.makeText(this,"Buscar",Toast.LENGTH_SHORT).show();
         }else if(id==R.id.nav_perfil)
         {
-
+            Intent obj = new Intent(getApplicationContext(),perfil.class);
+            obj.putExtra("usuario",usuario);
+            startActivity(obj);
         }else if(id==R.id.nav_config)
         {
-
+            Intent obj1 = new Intent(getApplicationContext(),Configuracion.class);
+            startActivity(obj1);
         }
         return super.onOptionsItemSelected(item);
     }

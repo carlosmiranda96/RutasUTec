@@ -7,23 +7,46 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="200dp"
-        android:text="BIENVENIDO"
-        android:textAlignment="center"
-        android:textColor="@android:color/background_light"
-        android:textSize="36sp"
-        android:textStyle="bold" />
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/fondo"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:orientation="vertical"
+            android:weightSum="1">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/imageView2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="28dp"
+                android:fontFamily="casual"
+                android:text="Rutas Utec"
+                android:textAlignment="center"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                android:textSize="36sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="156dp"
+                app:srcCompat="@drawable/fondo" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>
