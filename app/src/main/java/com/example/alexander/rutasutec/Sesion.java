@@ -10,8 +10,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
 import org.json.JSONArray;
 import org.json.JSONException;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,12 +26,15 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.Header;
 
 public class Sesion extends AppCompatActivity {
 
     Button inicio,cancelar;
     EditText usuario,contra;
-
+    String usu="",id="",correo="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +61,7 @@ public class Sesion extends AppCompatActivity {
                         ProgressDialog progress = new ProgressDialog(Sesion.this);
                         progress.setMessage("Iniciando Sesión..");
                         new MyTask(progress, Sesion.this,usuario.getText().toString(),contra.getText().toString()).execute();
+
                     }
                     else
                     {
@@ -70,6 +80,7 @@ public class Sesion extends AppCompatActivity {
         finish();
         startActivity(new Intent(Sesion.this, com.example.alexander.rutasutec.inicio.class));
     }
+
     public String InicioSesion(String usu,String pass)
     {
         URL url =null;
@@ -78,7 +89,7 @@ public class Sesion extends AppCompatActivity {
         StringBuilder resul = null;
         try
         {
-            url = new URL("https://carlosmi.heliohost.org/android/validaLogin.php?usuario="+usu+"&contra="+pass);
+            url = new URL("http://carlosmi.heliohost.org/android/validaLogin.php?usuario="+usu+"&contra="+pass);
             HttpURLConnection conection = (HttpURLConnection)url.openConnection();
             respuesta = conection.getResponseCode();
             resul = new StringBuilder();
@@ -110,7 +121,20 @@ public class Sesion extends AppCompatActivity {
             JSONArray json = new JSONArray(respuesta);
             if(json.length()>0)
             {
-                resp=1;
+                for(int i=0;i<json.length();i++)
+                {
+                    usu = json.getJSONObject(i).getString("usuario");
+                    id = json.getJSONObject(i).getString("idtipo");
+                    correo = json.getJSONObject(i).getString("correo");
+                }
+                if(id.equals("1"))
+                {
+                    resp = 2;
+                }
+                if(id.equals("2"))
+                {
+                    resp=1;
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -123,7 +147,7 @@ public class Sesion extends AppCompatActivity {
         ProgressDialog progress;
         Sesion act;
         String usuario,contra,mensaje;
-        Boolean iniciar=false;
+        String iniciar="";
         int progreso = 0;
         public MyTask(ProgressDialog progress, Sesion act, String usuario, String contra) {
             this.progress = progress;
@@ -133,13 +157,21 @@ public class Sesion extends AppCompatActivity {
         }
 
         public void onPreExecute() {
-            iniciar=false;
             progreso=0;
             progress.show();
         }
 
         public void onPostExecute(Void unused) {
-            if(iniciar==true)
+            if(iniciar.equals("admin"))
+            {
+                Intent objeto = new Intent(getApplicationContext(),administrador.class);
+                objeto.putExtra("usuario",usuario);
+                startActivity(objeto);
+                Toast.makeText(Sesion.this,"Bienvenido Administrador",Toast.LENGTH_SHORT).show();
+                act.usuario.setText("");
+                act.contra.setText("");
+            }
+            else if(iniciar.equals("usuario"))
             {
                 Intent objeto = new Intent(getApplicationContext(),Principal.class);
                 objeto.putExtra("usuario",usuario);
@@ -159,9 +191,12 @@ public class Sesion extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             if(objeto.verificar()==true)
             {
-                if(obtenerDatos(InicioSesion(usuario,contra))==1)
+                if(obtenerDatos(InicioSesion(usuario,contra))==2)
                 {
-                    iniciar=true;
+                    iniciar="admin";
+                }
+                else if(obtenerDatos(InicioSesion(usuario,contra))==1){
+                    iniciar = "usuario";
                 }
                 else
                 {

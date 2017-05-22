@@ -114,7 +114,7 @@ public class CrearUsuario extends AppCompatActivity {
         StringBuilder resul = null;
         try
         {
-            url = new URL("https://carlosmi.heliohost.org/android/addUsuario.php?usuario="+usu+"&contra="+pass+"&correo="+correo);
+            url = new URL("http://carlosmi.heliohost.org/android/addUsuario.php?usuario="+usu+"&contra="+pass+"&correo="+correo);
             HttpURLConnection conection = (HttpURLConnection)url.openConnection();
             respuesta = conection.getResponseCode();
             resul = new StringBuilder();

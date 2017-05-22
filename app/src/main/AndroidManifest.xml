@@ -23,7 +23,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".inicio"
-            android:label="Rutas Utec"></activity>
+            android:label="Rutas Utec" />
         <activity
             android:name=".CrearUsuario"
             android:label="Crear Usuario"
@@ -39,7 +39,7 @@
         <activity
             android:name=".Principal"
             android:label=" "
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -52,7 +52,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".perfil" android:label="Perfil" />
+        <activity
+            android:name=".perfil"
+            android:label="Perfil" />
         <activity
             android:name=".load"
             android:theme="@style/Theme.AppCompat.NoActionBar">
@@ -64,7 +66,11 @@
         </activity>
         <activity
             android:name=".Configuracion"
-            android:label="@string/title_activity_configuracion"></activity>
+            android:label="@string/title_activity_configuracion" />
+        <activity
+            android:name=".administrador"
+            android:label="@string/title_activity_administrador"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
