@@ -3,12 +3,16 @@ package com.example.alexander.rutasutec;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -21,7 +25,8 @@ import cz.msebera.android.httpclient.Header;
 
 public class fragRutas extends Fragment {
     ListView Rutas;
-    ArrayList<String> datos;
+    ArrayList<String> datos = new ArrayList<String>();
+    comunicarFragmentos comunicar;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -38,6 +43,8 @@ public class fragRutas extends Fragment {
         cargando.setMessage("Cargando Datos..");
         cargando.show();
 
+        //datos.clear();
+
         AsyncHttpClient cliente = new AsyncHttpClient();
         String url = "http://carlosmi.heliohost.org/android/mostrarRutas.php";
 
@@ -47,12 +54,11 @@ public class fragRutas extends Fragment {
                 if(statusCode==200)
                 {
                     cargando.dismiss();
-                    datos = new ArrayList<String>();
                     try {
                         JSONArray array = new JSONArray(new String(responseBody));
                         for(int i =0;i<array.length();i++)
                         {
-                            datos.add("Ruta "+array.getJSONObject(i).getString("ruta"));
+                            datos.add(array.getJSONObject(i).getString("ruta"));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -72,7 +78,8 @@ public class fragRutas extends Fragment {
         Rutas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(), "Posicion: " + datos.get(position), Toast.LENGTH_SHORT).show();
+                comunicar = (comunicarFragmentos)getActivity();
+                comunicar.responder(datos.get(position));
             }
         });
 

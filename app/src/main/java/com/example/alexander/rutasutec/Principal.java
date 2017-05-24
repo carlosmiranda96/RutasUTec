@@ -14,25 +14,29 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
 public class Principal extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,comunicarFragmentos {
 
     String usuario = "Default";
+    FragmentManager frag = getSupportFragmentManager();
+    String variable;
+    RelativeLayout contenido;
+    fragMaps maps = new fragMaps();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
-
+        contenido = (RelativeLayout)findViewById(R.id.contenedor);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FragmentManager frag = getSupportFragmentManager();
         //Fragmento inicial
-        frag.beginTransaction().replace(R.id.contenedor,new start()).commit();
+        frag.beginTransaction().replace(R.id.contenedor, new start()).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -44,7 +48,6 @@ public class Principal extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         //para mostrar el usuario en el Menu
         View headerView = navigationView.getHeaderView(0);
-
         TextView usuarioMenu = (TextView)headerView.findViewById(R.id.usuarioMenu);
         usuario = getIntent().getStringExtra("usuario");
         usuarioMenu.setText(usuario);
@@ -80,7 +83,7 @@ public class Principal extends AppCompatActivity
         if (id == R.id.nav_inicio) {
             frag.beginTransaction().replace(R.id.contenedor, new start()).commit();
         } else if (id == R.id.nav_mapas) {
-            frag.beginTransaction().replace(R.id.contenedor,new fragMaps()).commit();
+            frag.beginTransaction().replace(R.id.contenedor,maps).commit();
         } else if (id == R.id.nav_rutas) {
             frag.beginTransaction().replace(R.id.contenedor, new fragRutas()).commit();
         } else if (id == R.id.nav_contactanos){
@@ -118,5 +121,12 @@ public class Principal extends AppCompatActivity
             startActivity(obj1);
         }
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void responder(String dato) {
+        fragMaps fragment = fragMaps.newInstance(dato);
+        //contenido.removeAllViews();
+        getSupportFragmentManager().beginTransaction().remove(maps);
+        getSupportFragmentManager().beginTransaction().add(R.id.contenedor,fragment,"tag").commit();
     }
 }

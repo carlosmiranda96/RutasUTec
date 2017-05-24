@@ -40,8 +40,6 @@ public class perfil extends AppCompatActivity {
 
         usuario = getIntent().getStringExtra("usuario");
 
-        cargarDatos(usuario);
-
         usuarioPerfil.setEnabled(false);
         correoPerfil.setEnabled(false);
         nombrePerfil.setEnabled(false);
@@ -69,6 +67,8 @@ public class perfil extends AppCompatActivity {
                 actualizar.setVisibility(View.GONE);
             }
         });
+
+        cargarDatos(usuario);
     }
 
     private void cargarDatos(String usuario) {
@@ -103,6 +103,7 @@ public class perfil extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                //perfil.dismiss();
                 Toast.makeText(getApplicationContext(),error.toString(),Toast.LENGTH_SHORT).show();
             }
         });

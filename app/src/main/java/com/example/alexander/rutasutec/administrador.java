@@ -18,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class administrador extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, comunicarFragmentos{
 
     String usuario = "Default";
     @Override
@@ -86,6 +86,7 @@ public class administrador extends AppCompatActivity
         else if (id == R.id.nav_rutas_admin)
         {
             frag.beginTransaction().replace(R.id.contenedorAdmin,new fragRutas()).commit();
+            //Toast.makeText(getApplicationContext(),"No disponible",Toast.LENGTH_SHORT).show();
         }
         else if (id == R.id.nav_contactanos_admin)
         {
@@ -119,5 +120,12 @@ public class administrador extends AppCompatActivity
             Toast.makeText(this,"Ajustes inhabilitado",Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void responder(String dato) {
+        fragMaps fragment = fragMaps.newInstance(dato);
+        getSupportFragmentManager().beginTransaction().replace(R.id.contenedorAdmin,fragment,"tag").commit();
     }
 }
