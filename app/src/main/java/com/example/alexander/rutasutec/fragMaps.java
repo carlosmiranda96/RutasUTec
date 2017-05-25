@@ -161,6 +161,15 @@ public class fragMaps extends SupportMapFragment implements OnMapReadyCallback {
         });
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
 
     public static fragMaps newInstance(String variable) {
         fragMaps fragment = new fragMaps();
